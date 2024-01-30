@@ -212,6 +212,8 @@ namespace LMeter.Meter
                 };
 
                 int currentIndex = 0;
+                var playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
+                
                 if (sortedCombatants.Count > this.BarConfig.BarCount)
                 {
                     currentIndex = Math.Clamp(_scrollPosition, 0, sortedCombatants.Count - this.BarConfig.BarCount);
@@ -219,7 +221,7 @@ namespace LMeter.Meter
 
                     if (this.BarConfig.AlwaysShowSelf)
                     {
-                        MovePlayerIntoViewableRange(sortedCombatants, _scrollPosition);
+                        MovePlayerIntoViewableRange(sortedCombatants, _scrollPosition, playerName);
                     }
                 }
 
@@ -228,7 +230,7 @@ namespace LMeter.Meter
                 {
                     Combatant combatant = sortedCombatants[currentIndex];
                     combatant.Rank = (currentIndex + 1).ToString();
-                    UpdatePlayerName(combatant);
+                    UpdatePlayerName(combatant, playerName);
 
                     float current = this.GeneralConfig.DataType switch
                     {
@@ -245,10 +247,8 @@ namespace LMeter.Meter
             }
         }
 
-        private void MovePlayerIntoViewableRange(List<Combatant> sortedCombatants, int scrollPosition)
+        private void MovePlayerIntoViewableRange(List<Combatant> sortedCombatants, int scrollPosition, string playerName)
         {
-            var playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
-
             var oldPlayerIndex = sortedCombatants.FindIndex(combatant => combatant.Name.Contains("YOU") || combatant.Name.Contains(playerName));
             if (oldPlayerIndex == -1)
             {
@@ -264,12 +264,11 @@ namespace LMeter.Meter
             sortedCombatants.MoveItem(oldPlayerIndex, newPlayerIndex);
         }
         
-        private void UpdatePlayerName(Combatant combatant)
+        private void UpdatePlayerName(Combatant combatant, string localPlayerName)
         {
-            var playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
             combatant.NameOverwrite = this.BarConfig.UseCharacterName switch
             {
-                true when combatant.Name.Contains("YOU") => playerName,
+                true when combatant.Name.Contains("YOU") => localPlayerName,
                 false when combatant.NameOverwrite is not null => null,
                 _ => combatant.NameOverwrite
             };
