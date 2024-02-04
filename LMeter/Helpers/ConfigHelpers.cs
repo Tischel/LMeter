@@ -8,14 +8,30 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using LMeter.Config;
 using Dalamud.Plugin.Services;
+using LMeter.Converters;
 
 namespace LMeter.Helpers
 {
     public static class ConfigHelpers
     {
-        private static readonly JsonSerializerOptions _serializerOptionsIndented = new()
+        private static readonly JsonSerializerOptions SerializerOptionsIndented = new()
         {
             WriteIndented = true,
+            Converters =
+            {
+                new Vector2JsonConverter(),
+                new Vector4JsonConverter()
+            }
+        };
+        
+        private static readonly JsonSerializerOptions SerializerOptionsFlat = new()
+        {
+            WriteIndented = false,
+            Converters =
+            {
+                new Vector2JsonConverter(),
+                new Vector4JsonConverter()
+            }
         };
 
         public static void ExportToClipboard<T>(T toExport)
@@ -37,8 +53,7 @@ namespace LMeter.Helpers
         {
             try
             {
-                // TODO: Formatting None
-                string jsonString = JsonSerializer.Serialize(toExport);
+                string jsonString = JsonSerializer.Serialize(toExport, SerializerOptionsFlat);
                 using (MemoryStream outputStream = new MemoryStream())
                 {
                     using (DeflateStream compressionStream = new DeflateStream(outputStream, CompressionLevel.Optimal))
@@ -80,8 +95,7 @@ namespace LMeter.Helpers
                     }
                 }
                 
-                // TODO: Formatting None
-                T? importedObj = JsonSerializer.Deserialize<T>(decodedJsonString);
+                T? importedObj = JsonSerializer.Deserialize<T>(decodedJsonString, SerializerOptionsFlat);
                 return importedObj;
             }
             catch (Exception ex)
@@ -108,8 +122,7 @@ namespace LMeter.Helpers
                     var typeDefPattern = @"(^.*""\$type"": .*\n)";
                     jsonString = Regex.Replace(jsonString, typeDefPattern, string.Empty, RegexOptions.Multiline | RegexOptions.Compiled);
                     
-                    // TODO: Formatting Indented
-                    config = JsonSerializer.Deserialize<LMeterConfig>(jsonString, _serializerOptionsIndented);
+                    config = JsonSerializer.Deserialize<LMeterConfig>(jsonString, SerializerOptionsIndented);
                 }
             }
             catch (Exception ex)
@@ -143,8 +156,7 @@ namespace LMeter.Helpers
         {
             try
             {
-                // TODO: Formatting Indented
-                string jsonString = JsonSerializer.Serialize(config, _serializerOptionsIndented);
+                string jsonString = JsonSerializer.Serialize(config, SerializerOptionsIndented);
                 File.WriteAllText(Plugin.ConfigFilePath, jsonString);
             }
             catch (Exception ex)
