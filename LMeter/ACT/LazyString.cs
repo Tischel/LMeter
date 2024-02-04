@@ -1,5 +1,5 @@
 using System;
-using LMeter.Helpers;
+using LMeter.Enums;
 
 namespace LMeter.ACT
 {

@@ -4,7 +4,6 @@ using Dalamud.Interface;
 using ImGuiNET;
 using LMeter.ACT;
 using LMeter.Helpers;
-using System.Text.Json.Serialization;
 
 namespace LMeter.Config
 {

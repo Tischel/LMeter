@@ -7,13 +7,6 @@ using System.Text.Json.Serialization;
 
 namespace LMeter.Config
 {
-    public enum MeterDataType
-    {
-        Damage,
-        Healing,
-        DamageTaken
-    }
-
     public class GeneralConfig : IConfigPage
     {
         private static readonly string[] _meterTypeOptions = Enum.GetNames(typeof(MeterDataType));

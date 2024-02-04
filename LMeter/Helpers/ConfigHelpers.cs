@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using Dalamud.Interface.Internal.Notifications;
-using Dalamud.Logging;
 using ImGuiNET;
 using System.Text.Json;
 using System.Text.RegularExpressions;
