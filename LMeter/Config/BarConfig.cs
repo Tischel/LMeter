@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
 using LMeter.ACT;
+using LMeter.ACT.DataStructures;
 using LMeter.Helpers;
 using LMeter.Enums;
 

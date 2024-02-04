@@ -8,6 +8,7 @@ using LMeter.Config;
 using LMeter.Helpers;
 using LMeter.ACT;
 using System.Text.Json.Serialization;
+using LMeter.ACT.DataStructures;
 
 namespace LMeter.Meter
 {
