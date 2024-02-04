@@ -2,13 +2,14 @@ using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using LMeter.Config;
 using LMeter.Helpers;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -72,7 +73,7 @@ namespace LMeter.ACT
         {
             _lastEvent = null;
             _pastEvents = new List<ACTEvent>();
-            if (_config.ClearACT)
+            if (_config.ClearAct)
             {
                 IChatGui chat = Singletons.Get<IChatGui>();
                 XivChatEntry message = new XivChatEntry()
@@ -102,7 +103,7 @@ namespace LMeter.ACT
 
             try
             {
-                _receiveTask = Task.Run(() => this.Connect(_config.ACTSocketAddress));
+                _receiveTask = Task.Run(() => this.Connect(_config.ActSocketAddress));
             }
             catch (Exception ex)
             {
@@ -171,7 +172,13 @@ namespace LMeter.ACT
                             {
                                 try
                                 {
-                                    ACTEvent? newEvent = JsonConvert.DeserializeObject<ACTEvent>(data);
+                                    ACTEvent? newEvent = JsonSerializer.Deserialize<ACTEvent>(data, new JsonSerializerOptions
+                                    {
+                                        Converters =
+                                        {
+                                            new JsonStringEnumConverter()
+                                        }
+                                    });
 
                                     if (newEvent?.Encounter is not null &&
                                         newEvent?.Combatants is not null &&

@@ -7,7 +7,7 @@ using ImGuiNET;
 using LMeter.Config;
 using LMeter.Helpers;
 using LMeter.ACT;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LMeter.Meter
 {

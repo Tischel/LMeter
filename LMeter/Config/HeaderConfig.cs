@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using ImGuiNET;
 using LMeter.ACT;
 using LMeter.Helpers;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LMeter.Config
 {

@@ -8,8 +8,6 @@ namespace LMeter.Config
     {
         public string Name => "Colors";
         
-        public IConfigPage GetDefault() => new BarColorsConfig();
-        
         public ConfigColor PLDColor = new ConfigColor(168f / 255f, 210f / 255f, 230f / 255f, 1f);
         public ConfigColor DRKColor = new ConfigColor(209f / 255f, 38f / 255f, 204f / 255f, 1f);
         public ConfigColor WARColor = new ConfigColor(207f / 255f, 38f / 255f, 33f / 255f, 1f);
@@ -45,7 +43,9 @@ namespace LMeter.Config
         public ConfigColor ACNColor = new ConfigColor(45f / 255f, 155f / 255f, 120f / 255f, 1f);
 
         public ConfigColor UKNColor = new ConfigColor(218f / 255f, 157f / 255f, 46f / 255f, 1f);
-
+        
+        public IConfigPage GetDefault() => new BarColorsConfig();
+        
         public ConfigColor GetColor(Job job) => job switch
         {
             Job.GLA => this.GLAColor,

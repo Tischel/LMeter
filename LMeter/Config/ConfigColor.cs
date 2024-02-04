@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LMeter.Config
 {

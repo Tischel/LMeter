@@ -6,7 +6,7 @@ using Dalamud.Interface.Internal.Notifications;
 using ImGuiNET;
 using LMeter.Helpers;
 using LMeter.Meter;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LMeter.Config
 {
@@ -14,7 +14,7 @@ namespace LMeter.Config
     {
         private const float MenuBarHeight = 40;
 
-        [JsonIgnore] private string _input = string.Empty;
+        private string _input = string.Empty;
 
         public string Name => "Profiles";
 

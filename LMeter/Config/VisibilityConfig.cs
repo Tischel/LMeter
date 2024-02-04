@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using LMeter.Helpers;
 using System.Linq;
 using System.Collections.Generic;

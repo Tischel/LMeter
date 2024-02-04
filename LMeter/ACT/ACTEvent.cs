@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LMeter.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace LMeter.ACT
 {
@@ -19,16 +18,16 @@ namespace LMeter.ACT
         [JsonIgnore]
         public DateTime Timestamp;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string EventType = string.Empty;
         
-        [JsonProperty("isActive")]
+        [JsonPropertyName("isActive")]
         public string IsActive = string.Empty;
         
-        [JsonProperty("Encounter")]
+        [JsonPropertyName("Encounter")]
         public Encounter? Encounter;
         
-        [JsonProperty("Combatant")]
+        [JsonPropertyName("Combatant")]
         public Dictionary<string, Combatant>? Combatants;
 
         public bool IsEncounterActive()
@@ -69,39 +68,39 @@ namespace LMeter.ACT
             return TextTagFormatter.TextTagRegex.Replace(format, new TextTagFormatter(this, numberFormat, _members).Evaluate);
         }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title = string.Empty;
 
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
         public string Duration = string.Empty;
 
-        [JsonProperty("DURATION")]
+        [JsonPropertyName("DURATION")]
         private string _duration = string.Empty;
         
-        [JsonProperty("encdps")]
+        [JsonPropertyName("encdps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? Dps;
 
-        [JsonProperty("damage")]
+        [JsonPropertyName("damage")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? DamageTotal;
         
-        [JsonProperty("enchps")]
+        [JsonPropertyName("enchps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? Hps;
 
-        [JsonProperty("healed")]
+        [JsonPropertyName("healed")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? HealingTotal;
 
-        [JsonProperty("damagetaken")]
+        [JsonPropertyName("damagetaken")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? DamageTaken;
 
-        [JsonProperty("deaths")]
+        [JsonPropertyName("deaths")]
         public string? Deaths;
 
-        [JsonProperty("kills")]
+        [JsonPropertyName("kills")]
         public string? Kills;
 
         public static Encounter GetTestData()
@@ -138,10 +137,10 @@ namespace LMeter.ACT
             return TextTagFormatter.TextTagRegex.Replace(format, new TextTagFormatter(this, numberFormat, _members).Evaluate);
         }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string OriginalName = string.Empty;
 
-        [JsonProperty("nameOverwrite")] 
+        [JsonPropertyName("nameOverwrite")] 
         public string? NameOverwrite = null;
 
         public string Name => NameOverwrite ?? OriginalName;
@@ -155,78 +154,77 @@ namespace LMeter.ACT
         [JsonIgnore]
         public string Rank = string.Empty;
 
-        [JsonProperty("job")]
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("job")]
         public Job Job;
 
         [JsonIgnore]
         public LazyString<Job>? JobName;
 
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
         public string Duration = string.Empty;
         
-        [JsonProperty("encdps")]
+        [JsonPropertyName("encdps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? EncDps;
 
-        [JsonProperty("dps")]
+        [JsonPropertyName("dps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? Dps;
 
-        [JsonProperty("damage")]
+        [JsonPropertyName("damage")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? DamageTotal;
 
-        [JsonProperty("damage%")]
+        [JsonPropertyName("damage%")]
         public string DamagePct = string.Empty;
 
-        [JsonProperty("crithit%")]
+        [JsonPropertyName("crithit%")]
         public string CritHitPct = string.Empty;
 
-        [JsonProperty("DirectHitPct")]
+        [JsonPropertyName("DirectHitPct")]
         public string DirectHitPct = string.Empty;
 
-        [JsonProperty("CritDirectHitPct")]
+        [JsonPropertyName("CritDirectHitPct")]
         public string CritDirectHitPct = string.Empty;
         
-        [JsonProperty("enchps")]
+        [JsonPropertyName("enchps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? EncHps;
         
-        [JsonProperty("hps")]
+        [JsonPropertyName("hps")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? Hps;
 
         public LazyFloat? EffectiveHealing;
 
-        [JsonProperty("healed")]
+        [JsonPropertyName("healed")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? HealingTotal;
 
-        [JsonProperty("healed%")]
+        [JsonPropertyName("healed%")]
         public string HealingPct = string.Empty;
 
-        [JsonProperty("overHeal")]
+        [JsonPropertyName("overHeal")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? OverHeal;
 
-        [JsonProperty("OverHealPct")]
+        [JsonPropertyName("OverHealPct")]
         public string OverHealPct = string.Empty;
 
-        [JsonProperty("damagetaken")]
+        [JsonPropertyName("damagetaken")]
         [JsonConverter(typeof(LazyFloatConverter))]
         public LazyFloat? DamageTaken;
 
-        [JsonProperty("deaths")]
+        [JsonPropertyName("deaths")]
         public string Deaths = string.Empty;
 
-        [JsonProperty("kills")]
+        [JsonPropertyName("kills")]
         public string Kills = string.Empty;
 
-        [JsonProperty("maxhit")]
+        [JsonPropertyName("maxhit")]
         public string MaxHit = string.Empty;
 
-        [JsonProperty("MAXHIT")]
+        [JsonPropertyName("MAXHIT")]
         private string _maxHit = string.Empty;
 
         public LazyString<string?> MaxHitName;
