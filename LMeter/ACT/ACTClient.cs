@@ -29,8 +29,7 @@ namespace LMeter.ACT
         private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
-            Converters =
-            {
+            Converters = {
                 new JsonStringEnumConverter()
             }
         };

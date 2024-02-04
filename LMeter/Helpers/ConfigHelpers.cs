@@ -17,8 +17,7 @@ namespace LMeter.Helpers
         private static readonly JsonSerializerOptions SerializerOptionsIndented = new()
         {
             WriteIndented = true,
-            Converters =
-            {
+            Converters = {
                 new Vector2JsonConverter(),
                 new Vector4JsonConverter()
             }
@@ -27,8 +26,7 @@ namespace LMeter.Helpers
         private static readonly JsonSerializerOptions SerializerOptionsFlat = new()
         {
             WriteIndented = false,
-            Converters =
-            {
+            Converters = {
                 new Vector2JsonConverter(),
                 new Vector4JsonConverter()
             }
