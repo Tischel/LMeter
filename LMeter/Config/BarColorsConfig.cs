@@ -1,6 +1,6 @@
 using System.Numerics;
 using ImGuiNET;
-using LMeter.Helpers;
+using LMeter.Enums;
 
 namespace LMeter.Config
 {
@@ -8,44 +8,45 @@ namespace LMeter.Config
     {
         public string Name => "Colors";
         
+        // TODO: Move to EnumToConfigColorMapping Dictionary for performance and maintainability.
+        public ConfigColor PLDColor { get; set; } = new ConfigColor(168f / 255f, 210f / 255f, 230f / 255f, 1f);
+        public ConfigColor DRKColor { get; set; } = new ConfigColor(209f / 255f, 38f / 255f, 204f / 255f, 1f);
+        public ConfigColor WARColor { get; set; } = new ConfigColor(207f / 255f, 38f / 255f, 33f / 255f, 1f);
+        public ConfigColor GNBColor { get; set; } = new ConfigColor(121f / 255f, 109f / 255f, 48f / 255f, 1f);
+        public ConfigColor GLAColor { get; set; } = new ConfigColor(168f / 255f, 210f / 255f, 230f / 255f, 1f);
+        public ConfigColor MRDColor { get; set; } = new ConfigColor(207f / 255f, 38f / 255f, 33f / 255f, 1f);
+
+        public ConfigColor SCHColor { get; set; } = new ConfigColor(134f / 255f, 87f / 255f, 255f / 255f, 1f);
+        public ConfigColor WHMColor { get; set; } = new ConfigColor(255f / 255f, 240f / 255f, 220f / 255f, 1f);
+        public ConfigColor ASTColor { get; set; } = new ConfigColor(255f / 255f, 231f / 255f, 74f / 255f, 1f);
+        public ConfigColor SGEColor { get; set; } = new ConfigColor(144f / 255f, 176f / 255f, 255f / 255f, 1f);
+        public ConfigColor CNJColor { get; set; } = new ConfigColor(255f / 255f, 240f / 255f, 220f / 255f, 1f);
+
+        public ConfigColor MNKColor { get; set; } = new ConfigColor(214f / 255f, 156f / 255f, 0f / 255f, 1f);
+        public ConfigColor NINColor { get; set; } = new ConfigColor(175f / 255f, 25f / 255f, 100f / 255f, 1f);
+        public ConfigColor DRGColor { get; set; } = new ConfigColor(65f / 255f, 100f / 255f, 205f / 255f, 1f);
+        public ConfigColor SAMColor { get; set; } = new ConfigColor(228f / 255f, 109f / 255f, 4f / 255f, 1f);
+        public ConfigColor RPRColor { get; set; } = new ConfigColor(150f / 255f, 90f / 255f, 144f / 255f, 1f);
+        public ConfigColor PGLColor { get; set; } = new ConfigColor(214f / 255f, 156f / 255f, 0f / 255f, 1f);
+        public ConfigColor ROGColor { get; set; } = new ConfigColor(175f / 255f, 25f / 255f, 100f / 255f, 1f);
+        public ConfigColor LNCColor { get; set; } = new ConfigColor(65f / 255f, 100f / 255f, 205f / 255f, 1f);
+        
+        public ConfigColor BRDColor { get; set; } = new ConfigColor(145f / 255f, 186f / 255f, 94f / 255f, 1f);
+        public ConfigColor MCHColor { get; set; } = new ConfigColor(110f / 255f, 225f / 255f, 214f / 255f, 1f);
+        public ConfigColor DNCColor { get; set; } = new ConfigColor(226f / 255f, 176f / 255f, 175f / 255f, 1f);
+        public ConfigColor ARCColor { get; set; } = new ConfigColor(145f / 255f, 186f / 255f, 94f / 255f, 1f);
+
+        public ConfigColor BLMColor { get; set; } = new ConfigColor(165f / 255f, 121f / 255f, 214f / 255f, 1f);
+        public ConfigColor SMNColor { get; set; } = new ConfigColor(45f / 255f, 155f / 255f, 120f / 255f, 1f);
+        public ConfigColor RDMColor { get; set; } = new ConfigColor(232f / 255f, 123f / 255f, 123f / 255f, 1f);
+        public ConfigColor BLUColor { get; set; } = new ConfigColor(0f / 255f, 185f / 255f, 247f / 255f, 1f);
+        public ConfigColor THMColor { get; set; } = new ConfigColor(165f / 255f, 121f / 255f, 214f / 255f, 1f);
+        public ConfigColor ACNColor { get; set; } = new ConfigColor(45f / 255f, 155f / 255f, 120f / 255f, 1f);
+
+        public ConfigColor UKNColor { get; set; } = new ConfigColor(218f / 255f, 157f / 255f, 46f / 255f, 1f);
+        
         public IConfigPage GetDefault() => new BarColorsConfig();
         
-        public ConfigColor PLDColor = new ConfigColor(168f / 255f, 210f / 255f, 230f / 255f, 1f);
-        public ConfigColor DRKColor = new ConfigColor(209f / 255f, 38f / 255f, 204f / 255f, 1f);
-        public ConfigColor WARColor = new ConfigColor(207f / 255f, 38f / 255f, 33f / 255f, 1f);
-        public ConfigColor GNBColor = new ConfigColor(121f / 255f, 109f / 255f, 48f / 255f, 1f);
-        public ConfigColor GLAColor = new ConfigColor(168f / 255f, 210f / 255f, 230f / 255f, 1f);
-        public ConfigColor MRDColor = new ConfigColor(207f / 255f, 38f / 255f, 33f / 255f, 1f);
-
-        public ConfigColor SCHColor = new ConfigColor(134f / 255f, 87f / 255f, 255f / 255f, 1f);
-        public ConfigColor WHMColor = new ConfigColor(255f / 255f, 240f / 255f, 220f / 255f, 1f);
-        public ConfigColor ASTColor = new ConfigColor(255f / 255f, 231f / 255f, 74f / 255f, 1f);
-        public ConfigColor SGEColor = new ConfigColor(144f / 255f, 176f / 255f, 255f / 255f, 1f);
-        public ConfigColor CNJColor = new ConfigColor(255f / 255f, 240f / 255f, 220f / 255f, 1f);
-
-        public ConfigColor MNKColor = new ConfigColor(214f / 255f, 156f / 255f, 0f / 255f, 1f);
-        public ConfigColor NINColor = new ConfigColor(175f / 255f, 25f / 255f, 100f / 255f, 1f);
-        public ConfigColor DRGColor = new ConfigColor(65f / 255f, 100f / 255f, 205f / 255f, 1f);
-        public ConfigColor SAMColor = new ConfigColor(228f / 255f, 109f / 255f, 4f / 255f, 1f);
-        public ConfigColor RPRColor = new ConfigColor(150f / 255f, 90f / 255f, 144f / 255f, 1f);
-        public ConfigColor PGLColor = new ConfigColor(214f / 255f, 156f / 255f, 0f / 255f, 1f);
-        public ConfigColor ROGColor = new ConfigColor(175f / 255f, 25f / 255f, 100f / 255f, 1f);
-        public ConfigColor LNCColor = new ConfigColor(65f / 255f, 100f / 255f, 205f / 255f, 1f);
-        
-        public ConfigColor BRDColor = new ConfigColor(145f / 255f, 186f / 255f, 94f / 255f, 1f);
-        public ConfigColor MCHColor = new ConfigColor(110f / 255f, 225f / 255f, 214f / 255f, 1f);
-        public ConfigColor DNCColor = new ConfigColor(226f / 255f, 176f / 255f, 175f / 255f, 1f);
-        public ConfigColor ARCColor = new ConfigColor(145f / 255f, 186f / 255f, 94f / 255f, 1f);
-
-        public ConfigColor BLMColor = new ConfigColor(165f / 255f, 121f / 255f, 214f / 255f, 1f);
-        public ConfigColor SMNColor = new ConfigColor(45f / 255f, 155f / 255f, 120f / 255f, 1f);
-        public ConfigColor RDMColor = new ConfigColor(232f / 255f, 123f / 255f, 123f / 255f, 1f);
-        public ConfigColor BLUColor = new ConfigColor(0f / 255f, 185f / 255f, 247f / 255f, 1f);
-        public ConfigColor THMColor = new ConfigColor(165f / 255f, 121f / 255f, 214f / 255f, 1f);
-        public ConfigColor ACNColor = new ConfigColor(45f / 255f, 155f / 255f, 120f / 255f, 1f);
-
-        public ConfigColor UKNColor = new ConfigColor(218f / 255f, 157f / 255f, 46f / 255f, 1f);
-
         public ConfigColor GetColor(Job job) => job switch
         {
             Job.GLA => this.GLAColor,

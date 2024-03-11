@@ -1,39 +1,29 @@
-
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LMeter.ACT
 {
-    public class LazyFloatConverter : JsonConverter
+    public class LazyFloatConverter : JsonConverter<LazyFloat>
     {
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, LazyFloat value, JsonSerializerOptions serializer)
         {
             throw new NotImplementedException("Write not supported.");
         }
 
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        public override LazyFloat Read(ref Utf8JsonReader reader, Type objectType, JsonSerializerOptions serializerOptions)
         {
             if (objectType != typeof(LazyFloat))
             {
-                return serializer.Deserialize(reader, objectType);
+                throw new NotImplementedException("Unknown Type found");
             }
 
-            if (reader.TokenType != JsonToken.String)
+            if (reader.TokenType != JsonTokenType.String)
             {
                 return new LazyFloat(0f);
             }
 
-            return new LazyFloat(serializer.Deserialize(reader, typeof(string))?.ToString());
-        }
-
-        public override bool CanRead
-        {
-            get { return true; }
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
+            return new LazyFloat(reader.GetString());
         }
 
         public override bool CanConvert(Type objectType)

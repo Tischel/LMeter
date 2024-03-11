@@ -1,26 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using Dalamud.Interface.Internal.Notifications;
-using Dalamud.Logging;
 using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using LMeter.Config;
 using Dalamud.Plugin.Services;
+using LMeter.Converters;
 
 namespace LMeter.Helpers
 {
     public static class ConfigHelpers
     {
-        private static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerOptions SerializerOptionsIndented = new()
         {
-            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-            TypeNameHandling = TypeNameHandling.Objects,
-            ObjectCreationHandling = ObjectCreationHandling.Replace,
-            SerializationBinder = new LMeterSerializationBinder()
+            WriteIndented = true,
+            Converters = {
+                new Vector2JsonConverter(),
+                new Vector4JsonConverter()
+            }
+        };
+        
+        private static readonly JsonSerializerOptions SerializerOptionsFlat = new()
+        {
+            WriteIndented = false,
+            Converters = {
+                new Vector2JsonConverter(),
+                new Vector4JsonConverter()
+            }
         };
 
         public static void ExportToClipboard<T>(T toExport)
@@ -42,7 +51,7 @@ namespace LMeter.Helpers
         {
             try
             {
-                string jsonString = JsonConvert.SerializeObject(toExport, Formatting.None, _serializerSettings);
+                string jsonString = JsonSerializer.Serialize(toExport, SerializerOptionsFlat);
                 using (MemoryStream outputStream = new MemoryStream())
                 {
                     using (DeflateStream compressionStream = new DeflateStream(outputStream, CompressionLevel.Optimal))
@@ -83,8 +92,8 @@ namespace LMeter.Helpers
                         }
                     }
                 }
-
-                T? importedObj = JsonConvert.DeserializeObject<T>(decodedJsonString, _serializerSettings);
+                
+                T? importedObj = JsonSerializer.Deserialize<T>(decodedJsonString, SerializerOptionsFlat);
                 return importedObj;
             }
             catch (Exception ex)
@@ -104,7 +113,14 @@ namespace LMeter.Helpers
                 if (File.Exists(path))
                 {
                     string jsonString = File.ReadAllText(path);
-                    config = JsonConvert.DeserializeObject<LMeterConfig>(jsonString, _serializerSettings);
+                    
+                    // Temporary measure, should be removed after a while of having being ran in production.
+                    // We have to remove the `$type` lines from the config otherwise we can't properly move to system.text.json
+                    // On top of it being a massive potential security issue and it being an anti pattern
+                    var typeDefPattern = @"(^.*""\$type"": .*\n)";
+                    jsonString = Regex.Replace(jsonString, typeDefPattern, string.Empty, RegexOptions.Multiline | RegexOptions.Compiled);
+                    
+                    config = JsonSerializer.Deserialize<LMeterConfig>(jsonString, SerializerOptionsIndented);
                 }
             }
             catch (Exception ex)
@@ -138,66 +154,13 @@ namespace LMeter.Helpers
         {
             try
             {
-                string jsonString = JsonConvert.SerializeObject(config, Formatting.Indented, _serializerSettings);
+                string jsonString = JsonSerializer.Serialize(config, SerializerOptionsIndented);
                 File.WriteAllText(Plugin.ConfigFilePath, jsonString);
             }
             catch (Exception ex)
             {
                 Singletons.Get<IPluginLog>().Error(ex.ToString());
             }
-        }
-    }
-
-    /// <summary>
-    /// Because the game blocks the json serializer from loading assemblies at runtime, we define
-    /// a custom SerializationBinder to ignore the assembly name for the types defined by this plugin.
-    /// </summary>
-    public class LMeterSerializationBinder : ISerializationBinder
-    {
-        // TODO: Make this automatic somehow?
-        private static List<Type> _configTypes = new List<Type>()
-        {
-        };
-
-        private readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
-        private readonly Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
-
-        public LMeterSerializationBinder()
-        {
-            foreach (Type type in _configTypes)
-            {
-                if (type.FullName is not null)
-                {
-                    this.typeToName.Add(type, type.FullName);
-                    this.nameToType.Add(type.FullName, type);
-                }
-            }
-        }
-
-        public void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
-        {
-            if (this.typeToName.TryGetValue(serializedType, out string? name))
-            {
-                assemblyName = null;
-                typeName = name;
-            }
-            else
-            {
-                assemblyName = serializedType.Assembly.FullName;
-                typeName = serializedType.FullName;
-            }
-        }
-
-        public Type BindToType(string? assemblyName, string? typeName)
-        {
-            if (typeName is not null &&
-                this.nameToType.TryGetValue(typeName, out Type? type))
-            {
-                return type;
-            }
-
-            return Type.GetType($"{typeName}, {assemblyName}", true) ??
-                throw new TypeLoadException($"Unable to load type '{typeName}' from assembly '{assemblyName}'");
         }
     }
 }

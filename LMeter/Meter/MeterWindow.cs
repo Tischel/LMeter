@@ -7,25 +7,26 @@ using ImGuiNET;
 using LMeter.Config;
 using LMeter.Helpers;
 using LMeter.ACT;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using LMeter.ACT.DataStructures;
 
 namespace LMeter.Meter
 {
     public class MeterWindow : IConfigurable
     {
-        [JsonIgnore] private bool _lastFrameWasUnlocked = false;
-        [JsonIgnore] private bool _lastFrameWasDragging = false;
-        [JsonIgnore] private bool _lastFrameWasPreview = false;
-        [JsonIgnore] private bool _lastFrameWasCombat = false;
-        [JsonIgnore] private bool _unlocked = false;
-        [JsonIgnore] private bool _hovered = false;
-        [JsonIgnore] private bool _dragging = false;
-        [JsonIgnore] private bool _locked = false;
-        [JsonIgnore] private int _eventIndex = -1;
-        [JsonIgnore] private ACTEvent? _previewEvent = null;
-        [JsonIgnore] private int _scrollPosition = 0;
-        [JsonIgnore] private DateTime? _lastSortedTimestamp = null;
-        [JsonIgnore] private List<Combatant> _lastSortedCombatants = new List<Combatant>();
+        private bool _lastFrameWasUnlocked;
+        private bool _lastFrameWasDragging;
+        private bool _lastFrameWasPreview;
+        private bool _lastFrameWasCombat;
+        private bool _unlocked;
+        private bool _hovered;
+        private bool _dragging;
+        private bool _locked;
+        private int _eventIndex = -1;
+        private ACTEvent? _previewEvent;
+        private int _scrollPosition;
+        private DateTime? _lastSortedTimestamp;
+        private List<Combatant> _lastSortedCombatants = new List<Combatant>();
 
         [JsonIgnore] public string ID { get; init; }
 

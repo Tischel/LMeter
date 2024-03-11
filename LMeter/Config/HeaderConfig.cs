@@ -3,51 +3,171 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
 using LMeter.ACT;
+using LMeter.ACT.DataStructures;
 using LMeter.Helpers;
-using Newtonsoft.Json;
+using LMeter.Enums;
 
 namespace LMeter.Config
 {
     public class HeaderConfig : IConfigPage
     {
-        [JsonIgnore]
-        private static string[] _anchorOptions = Enum.GetNames(typeof(DrawAnchor));
+        private static readonly string[] _anchorOptions = Enum.GetNames(typeof(DrawAnchor));
+        private bool _showHeader = true;
+        private int _headerHeight = 25;
+        private bool _showEncounterDuration = true;
+        private Vector2 _durationOffset = new Vector2(0, 0);
+        private int _durationFontId;
+        private DrawAnchor _durationAlign = DrawAnchor.Left;
+        private bool _durationShowOutline = true;
+        private bool _showEncounterName = true;
+        private Vector2 _nameOffset = new Vector2(0, 0);
+        private int _nameFontId;
+        private DrawAnchor _nameAlign = DrawAnchor.Left;
+        private bool _nameShowOutline = true;
+        private bool _showRaidStats = true;
+        private string _raidStatsFormat = "[dps]rdps [hps]rhps Deaths: [deaths]";
+        private bool _thousandsSeparators = true;
+        private Vector2 _statsOffset = new Vector2(0, 0);
+        private int _statsFontId;
+        private DrawAnchor _statsAlign = DrawAnchor.Right;
+        private bool _statsShowOutline = true;
 
         public string Name => "Header";
 
-        public bool ShowHeader = true;
-        public int HeaderHeight = 25;
-        public ConfigColor BackgroundColor = new ConfigColor(30f / 255f, 30f / 255f, 30f / 255f, 230 / 255f);
+        public bool ShowHeader
+        {
+            get => _showHeader;
+            set => _showHeader = value;
+        }
 
-        public bool ShowEncounterDuration = true;
-        public ConfigColor DurationColor = new ConfigColor(0f / 255f, 190f / 255f, 225f / 255f, 1f);
-        public bool DurationShowOutline = true;
-        public ConfigColor DurationOutlineColor = new ConfigColor(0, 0, 0, 0.5f);
-        public DrawAnchor DurationAlign = DrawAnchor.Left;
-        public Vector2 DurationOffset = new Vector2(0, 0);
-        public int DurationFontId = 0;
-        public string DurationFontKey = FontsManager.DalamudFontKey;
+        public int HeaderHeight
+        {
+            get => _headerHeight;
+            set => _headerHeight = value;
+        }
 
-        public bool ShowEncounterName = true;
-        public ConfigColor NameColor = new ConfigColor(1, 1, 1, 1);
-        public bool NameShowOutline = true;
-        public ConfigColor NameOutlineColor = new ConfigColor(0, 0, 0, 0.5f);
-        public DrawAnchor NameAlign = DrawAnchor.Left;
-        public Vector2 NameOffset = new Vector2(0, 0);
-        public int NameFontId = 0;
-        public string NameFontKey = FontsManager.DalamudFontKey;
-        
-        public bool ShowRaidStats = true;
-        public ConfigColor RaidStatsColor = new ConfigColor(0.5f, 0.5f, 0.5f, 1f);
-        public bool StatsShowOutline = true;
-        public ConfigColor StatsOutlineColor = new ConfigColor(0, 0, 0, 0.5f);
-        public DrawAnchor StatsAlign = DrawAnchor.Right;
-        public Vector2 StatsOffset = new Vector2(0, 0);
-        public int StatsFontId = 0;
-        public string StatsFontKey = FontsManager.DalamudFontKey;
-        public string RaidStatsFormat = "[dps]rdps [hps]rhps Deaths: [deaths]";
-        public bool ThousandsSeparators = true;
-        
+        public ConfigColor BackgroundColor { get; set; } = new ConfigColor(30f / 255f, 30f / 255f, 30f / 255f, 230 / 255f);
+
+        public bool ShowEncounterDuration
+        {
+            get => _showEncounterDuration;
+            set => _showEncounterDuration = value;
+        }
+
+        public ConfigColor DurationColor { get; set; } = new ConfigColor(0f / 255f, 190f / 255f, 225f / 255f, 1f);
+
+        public bool DurationShowOutline
+        {
+            get => _durationShowOutline;
+            set => _durationShowOutline = value;
+        }
+
+        public ConfigColor DurationOutlineColor { get; set; } = new ConfigColor(0, 0, 0, 0.5f);
+
+        public DrawAnchor DurationAlign
+        {
+            get => _durationAlign;
+            set => _durationAlign = value;
+        }
+
+        public Vector2 DurationOffset
+        {
+            get => _durationOffset;
+            set => _durationOffset = value;
+        }
+
+        public int DurationFontId
+        {
+            get => _durationFontId;
+            set => _durationFontId = value;
+        }
+
+        public string DurationFontKey { get; set; } = FontsManager.DalamudFontKey;
+
+        public bool ShowEncounterName
+        {
+            get => _showEncounterName;
+            set => _showEncounterName = value;
+        }
+
+        public ConfigColor NameColor { get; set; } = new ConfigColor(1, 1, 1, 1);
+
+        public bool NameShowOutline
+        {
+            get => _nameShowOutline;
+            set => _nameShowOutline = value;
+        }
+
+        public ConfigColor NameOutlineColor { get; set; } = new ConfigColor(0, 0, 0, 0.5f);
+
+        public DrawAnchor NameAlign
+        {
+            get => _nameAlign;
+            set => _nameAlign = value;
+        }
+
+        public Vector2 NameOffset
+        {
+            get => _nameOffset;
+            set => _nameOffset = value;
+        }
+
+        public int NameFontId
+        {
+            get => _nameFontId;
+            set => _nameFontId = value;
+        }
+
+        public string NameFontKey { get; set; } = FontsManager.DalamudFontKey;
+
+        public bool ShowRaidStats
+        {
+            get => _showRaidStats;
+            set => _showRaidStats = value;
+        }
+
+        public ConfigColor RaidStatsColor { get; set; } = new ConfigColor(0.5f, 0.5f, 0.5f, 1f);
+
+        public bool StatsShowOutline
+        {
+            get => _statsShowOutline;
+            set => _statsShowOutline = value;
+        }
+
+        public ConfigColor StatsOutlineColor { get; set; } = new ConfigColor(0, 0, 0, 0.5f);
+
+        public DrawAnchor StatsAlign
+        {
+            get => _statsAlign;
+            set => _statsAlign = value;
+        }
+
+        public Vector2 StatsOffset
+        {
+            get => _statsOffset;
+            set => _statsOffset = value;
+        }
+
+        public int StatsFontId
+        {
+            get => _statsFontId;
+            set => _statsFontId = value;
+        }
+
+        public string StatsFontKey { get; set; } = FontsManager.DalamudFontKey;
+
+        public string RaidStatsFormat
+        {
+            get => _raidStatsFormat;
+            set => _raidStatsFormat = value;
+        }
+
+        public bool ThousandsSeparators
+        {
+            get => _thousandsSeparators;
+            set => _thousandsSeparators = value;
+        }
+
         public IConfigPage GetDefault()
         {
             HeaderConfig defaultConfig = new HeaderConfig();
@@ -139,11 +259,11 @@ namespace LMeter.Config
 
             if (ImGui.BeginChild($"##{this.Name}", new Vector2(size.X, size.Y), true))
             {
-                ImGui.Checkbox("Show Header", ref this.ShowHeader);
+                ImGui.Checkbox("Show Header", ref this._showHeader);
                 if (this.ShowHeader)
                 {
                     DrawHelpers.DrawNestIndicator(1);
-                    ImGui.DragInt("Header Height", ref this.HeaderHeight, 1, 0, 100);
+                    ImGui.DragInt("Header Height", ref this._headerHeight, 1, 0, 100);
 
                     DrawHelpers.DrawNestIndicator(1);
                     Vector4 vector = this.BackgroundColor.Vector;
@@ -152,11 +272,11 @@ namespace LMeter.Config
 
                     ImGui.NewLine();
                     DrawHelpers.DrawNestIndicator(1);
-                    ImGui.Checkbox("Show Encounter Duration", ref this.ShowEncounterDuration);
+                    ImGui.Checkbox("Show Encounter Duration", ref this._showEncounterDuration);
                     if (this.ShowEncounterDuration)
                     {
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.DragFloat2("Position Offset##Duration", ref this.DurationOffset);
+                        ImGui.DragFloat2("Position Offset##Duration", ref this._durationOffset);
 
                         if (!FontsManager.ValidateFont(fontOptions, this.DurationFontId, this.DurationFontKey))
                         {
@@ -171,11 +291,11 @@ namespace LMeter.Config
                         }
                         
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Font##Duration", ref this.DurationFontId, fontOptions, fontOptions.Length);
+                        ImGui.Combo("Font##Duration", ref this._durationFontId, fontOptions, fontOptions.Length);
                         this.DurationFontKey = fontOptions[this.DurationFontId];
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Text Align##Duration", ref Unsafe.As<DrawAnchor, int>(ref this.DurationAlign), _anchorOptions, _anchorOptions.Length);
+                        ImGui.Combo("Text Align##Duration", ref Unsafe.As<DrawAnchor, int>(ref this._durationAlign), _anchorOptions, _anchorOptions.Length);
 
                         DrawHelpers.DrawNestIndicator(2);
                         vector = this.DurationColor.Vector;
@@ -183,7 +303,7 @@ namespace LMeter.Config
                         this.DurationColor.Vector = vector;
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Checkbox("Show Outline##Duration", ref this.DurationShowOutline);
+                        ImGui.Checkbox("Show Outline##Duration", ref this._durationShowOutline);
                         if (this.DurationShowOutline)
                         {
                             DrawHelpers.DrawNestIndicator(3);
@@ -195,11 +315,11 @@ namespace LMeter.Config
 
                     ImGui.NewLine();
                     DrawHelpers.DrawNestIndicator(1);
-                    ImGui.Checkbox("Show Encounter Name", ref this.ShowEncounterName);
+                    ImGui.Checkbox("Show Encounter Name", ref this._showEncounterName);
                     if (this.ShowEncounterName)
                     {
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.DragFloat2("Position Offset##Name", ref this.NameOffset);
+                        ImGui.DragFloat2("Position Offset##Name", ref this._nameOffset);
 
                         if (!FontsManager.ValidateFont(fontOptions, this.NameFontId, this.NameFontKey))
                         {
@@ -214,11 +334,11 @@ namespace LMeter.Config
                         }
                         
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Font##Name", ref this.NameFontId, fontOptions, fontOptions.Length);
+                        ImGui.Combo("Font##Name", ref this._nameFontId, fontOptions, fontOptions.Length);
                         this.NameFontKey = fontOptions[this.NameFontId];
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Text Align##Name", ref Unsafe.As<DrawAnchor, int>(ref this.NameAlign), _anchorOptions, _anchorOptions.Length);
+                        ImGui.Combo("Text Align##Name", ref Unsafe.As<DrawAnchor, int>(ref this._nameAlign), _anchorOptions, _anchorOptions.Length);
 
                         DrawHelpers.DrawNestIndicator(2);
                         vector = this.NameColor.Vector;
@@ -226,7 +346,7 @@ namespace LMeter.Config
                         this.NameColor.Vector = vector;
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Checkbox("Show Outline##Name", ref this.NameShowOutline);
+                        ImGui.Checkbox("Show Outline##Name", ref this._nameShowOutline);
                         if (this.NameShowOutline)
                         {
                             DrawHelpers.DrawNestIndicator(3);
@@ -238,21 +358,21 @@ namespace LMeter.Config
 
                     ImGui.NewLine();
                     DrawHelpers.DrawNestIndicator(1);
-                    ImGui.Checkbox("Show Raid Stats", ref this.ShowRaidStats);
+                    ImGui.Checkbox("Show Raid Stats", ref this._showRaidStats);
                     if (this.ShowRaidStats)
                     {
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.InputText("Raid Stats Format", ref this.RaidStatsFormat, 128);
+                        ImGui.InputText("Raid Stats Format", ref this._raidStatsFormat, 128);
                         if (ImGui.IsItemHovered())
                         {
                             ImGui.SetTooltip(Utils.GetTagsTooltip(Encounter.TextTags));
                         }
                         
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Checkbox("Use Thousands Separators for Numbers", ref this.ThousandsSeparators);
+                        ImGui.Checkbox("Use Thousands Separators for Numbers", ref this._thousandsSeparators);
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.DragFloat2("Position Offset##Stats", ref this.StatsOffset);
+                        ImGui.DragFloat2("Position Offset##Stats", ref this._statsOffset);
 
                         if (!FontsManager.ValidateFont(fontOptions, this.StatsFontId, this.StatsFontKey))
                         {
@@ -267,11 +387,11 @@ namespace LMeter.Config
                         }
                         
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Font##Stats", ref this.StatsFontId, fontOptions, fontOptions.Length);
+                        ImGui.Combo("Font##Stats", ref this._statsFontId, fontOptions, fontOptions.Length);
                         this.StatsFontKey = fontOptions[this.StatsFontId];
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Combo("Text Align##Stats", ref Unsafe.As<DrawAnchor, int>(ref this.StatsAlign), _anchorOptions, _anchorOptions.Length);
+                        ImGui.Combo("Text Align##Stats", ref Unsafe.As<DrawAnchor, int>(ref this._statsAlign), _anchorOptions, _anchorOptions.Length);
 
                         DrawHelpers.DrawNestIndicator(2);
                         vector = this.RaidStatsColor.Vector;
@@ -279,7 +399,7 @@ namespace LMeter.Config
                         this.RaidStatsColor.Vector = vector;
 
                         DrawHelpers.DrawNestIndicator(2);
-                        ImGui.Checkbox("Show Outline##Stats", ref this.StatsShowOutline);
+                        ImGui.Checkbox("Show Outline##Stats", ref this._statsShowOutline);
                         if (this.StatsShowOutline)
                         {
                             DrawHelpers.DrawNestIndicator(3);

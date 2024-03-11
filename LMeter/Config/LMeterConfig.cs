@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using LMeter.Helpers;
 
 namespace LMeter.Config
 {
-    [JsonObject]
     public class LMeterConfig : IConfigurable, IPluginDisposable
     {
         public string Name
@@ -16,7 +14,7 @@ namespace LMeter.Config
 
         public string Version => Plugin.Version;
 
-        public bool FirstLoad = true;
+        public bool FirstLoad { get; set; } = true;
 
         public MeterListConfig MeterList { get; init; }
 
@@ -24,7 +22,6 @@ namespace LMeter.Config
 
         public FontConfig FontConfig { get; init; }
 
-        [JsonIgnore]
         private AboutPage AboutPage { get; } = new AboutPage();
 
         public LMeterConfig()
