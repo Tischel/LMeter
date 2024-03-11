@@ -194,7 +194,7 @@ namespace LMeter.Config
             Vector2 durationSize = Vector2.Zero;
             if (this.ShowEncounterDuration)
             {
-                using (FontsManager.PushFont(this.DurationFontKey))
+                using (FontsManager.GetFont(DurationFontKey)?.Push())
                 {
                     string duration = encounter is null ? $" LMeter v{Plugin.Version}" : $" {encounter.Duration}";
                     durationSize = ImGui.CalcTextSize(duration);
@@ -211,7 +211,7 @@ namespace LMeter.Config
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    using (FontsManager.PushFont(this.StatsFontKey))
+                    using (FontsManager.GetFont(StatsFontKey)?.Push())
                     {
                         raidStatsSize = ImGui.CalcTextSize(text);
                         Vector2 statsPos = Utils.GetAnchoredPosition(pos + this.StatsOffset, -headerSize, DrawAnchor.Right);
@@ -223,7 +223,7 @@ namespace LMeter.Config
 
             if (this.ShowEncounterName && encounter is not null && !string.IsNullOrEmpty(encounter.Title))
             {
-                using (FontsManager.PushFont(this.NameFontKey))
+                using (FontsManager.GetFont(NameFontKey)?.Push())
                 {
                     string name = $" {encounter.Title}";
                     Vector2 nameSize = ImGui.CalcTextSize(name);

@@ -257,7 +257,7 @@ namespace LMeter.Config
             if (this.ShowRankText)
             {
                 string rankText = combatant.GetFormattedString($"{this.RankTextFormat}", this.ThousandsSeparators ? "N" : "F");
-                using(FontsManager.PushFont(this.RankTextFontKey))
+                using(FontsManager.GetFont(RankTextFontKey)?.Push())
                 {
                     textOffset += ImGui.CalcTextSize("00.").X;
                     Vector2 rankTextSize = ImGui.CalcTextSize(rankText);
@@ -273,7 +273,7 @@ namespace LMeter.Config
                 }
             }
 
-            using (FontsManager.PushFont(this.BarNameFontKey))
+            using (FontsManager.GetFont(BarNameFontKey)?.Push())
             {
                 var leftText = combatant.Name;
                 if (!leftText.Contains("YOU"))
@@ -293,7 +293,7 @@ namespace LMeter.Config
                     this.BarNameOutlineColor.Base);
             }
 
-            using (FontsManager.PushFont(this.BarDataFontKey))
+            using (FontsManager.GetFont(BarDataFontKey)?.Push())
             {
                 string rightText = combatant.GetFormattedString($" {this.RightTextFormat} ", this.ThousandsSeparators ? "N" : "F");
                 Vector2 dataTextSize = ImGui.CalcTextSize(rightText);
