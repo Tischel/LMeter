@@ -108,6 +108,29 @@ namespace LMeter.Meter
             _lastFrameWasDragging = _hovered || _dragging;
         }
 
+        private static Vector2 GetPositionInsideBoundaries(Vector2 zeroPosition, Vector2 localPosition, Vector2 windowSize, Vector2 viewportSize)
+        {
+            if (localPosition.X + windowSize.X > viewportSize.X)
+            {
+                localPosition.X = zeroPosition.X + viewportSize.X - windowSize.X;
+            } 
+            else if (localPosition.X < -viewportSize.X)
+            {
+                localPosition.X = -viewportSize.X;
+            }
+
+            if (localPosition.Y + windowSize.Y > viewportSize.Y)
+            {
+                localPosition.Y = zeroPosition.Y + viewportSize.Y - windowSize.Y;
+            }
+            else if (localPosition.Y < -viewportSize.Y)
+            {
+                localPosition.Y = -viewportSize.Y;
+            }
+
+            return localPosition;
+        }
+
         public void Draw(Vector2 pos)
         {
             if (!this.GeneralConfig.Preview && !this.VisibilityConfig.IsVisible())
@@ -117,6 +140,9 @@ namespace LMeter.Meter
 
             Vector2 localPos = pos + this.GeneralConfig.Position;
             Vector2 size = this.GeneralConfig.Size;
+            Vector2 viewportSize = ImGui.GetMainViewport().Size;
+            
+            localPos = GetPositionInsideBoundaries(pos, localPos, size, viewportSize);
 
             if (ImGui.IsMouseHoveringRect(localPos, localPos + size))
             {
