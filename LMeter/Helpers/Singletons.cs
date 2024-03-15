@@ -9,7 +9,7 @@ namespace LMeter.Helpers
 
         public static T Get<T>()
         {
-            if (ActiveInstances.TryGetValue(typeof(T), out var o))
+            if (ActiveInstances.TryGetValue(typeof(T), out object? o))
             {
                 return (T)o;
             }
@@ -37,7 +37,7 @@ namespace LMeter.Helpers
 
         public static void Dispose()
         {
-            foreach (var singleton in ActiveInstances.Values)
+            foreach (object singleton in ActiveInstances.Values)
             {
                 // Only dispose the disposable objects that we own
                 if (singleton is IPluginDisposable disposable)

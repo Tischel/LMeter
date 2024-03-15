@@ -106,7 +106,7 @@ namespace LMeter
 
         private static IDalamudTextureWrap? LoadIconTexture(UiBuilder uiBuilder)
         {
-            var pluginInterface = Singletons.Get<DalamudPluginInterface>();
+            DalamudPluginInterface pluginInterface = Singletons.Get<DalamudPluginInterface>();
             string? pluginPath = pluginInterface.AssemblyLocation.DirectoryName;
             if (string.IsNullOrEmpty(pluginPath))
             {
@@ -134,7 +134,7 @@ namespace LMeter
 
         private static string LoadChangelog()
         {
-            var pluginInterface = Singletons.Get<DalamudPluginInterface>();
+            DalamudPluginInterface pluginInterface = Singletons.Get<DalamudPluginInterface>();
             string? pluginPath = pluginInterface.AssemblyLocation.DirectoryName;
 
             if (string.IsNullOrEmpty(pluginPath))

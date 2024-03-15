@@ -35,7 +35,7 @@ namespace LMeter.Helpers
 
         private void BuildFonts()
         {
-            var fontDir = GetUserFontPath();
+            string fontDir = GetUserFontPath();
 
             if (string.IsNullOrWhiteSpace(fontDir))
             {
@@ -44,19 +44,19 @@ namespace LMeter.Helpers
 
             ClearFontHandles();
 
-            foreach (var font in _fontData)
+            foreach (FontData font in _fontData)
             {
-                var fontPath = $"{fontDir}{font.Name}.ttf";
+                string fontPath = $"{fontDir}{font.Name}.ttf";
                 if (!File.Exists(fontPath))
                 {
                     continue;
                 }
                 
-                var handle = _fontAtlas.NewDelegateFontHandle(
+                IFontHandle handle = _fontAtlas.NewDelegateFontHandle(
                     e => e.OnPreBuild(
                         tk =>
                         {
-                            var config = new SafeFontConfig { SizePx = font.Size };
+                            SafeFontConfig config = new SafeFontConfig { SizePx = font.Size };
                             config.MergeFont = tk.AddFontFromFile(fontPath, config);
                             tk.AddGameSymbol(config);
                             tk.AttachExtraGlyphsForDalamudLanguage(config);
@@ -79,7 +79,7 @@ namespace LMeter.Helpers
 
         private void ClearFontHandles()
         {
-            foreach (var (_, value) in _imGuiFonts)
+            foreach ((string _, IFontHandle value) in _imGuiFonts)
             {
                 value.Dispose();
             }
@@ -93,7 +93,7 @@ namespace LMeter.Helpers
 
         public static IFontHandle? GetFont(string fontKey)
         {
-            var manager = Singletons.Get<FontsManager>();
+            FontsManager manager = Singletons.Get<FontsManager>();
             if (string.IsNullOrWhiteSpace(fontKey) || fontKey.Equals(DalamudFontKey) || !manager._imGuiFonts.ContainsKey(fontKey))
             {
                 return null;
@@ -115,7 +115,7 @@ namespace LMeter.Helpers
 
         public int GetFontIndex(string fontKey)
         {
-            for (var i = 0; i < _fontList.Length; i++)
+            for (int i = 0; i < _fontList.Length; i++)
             {
                 if (_fontList[i].Equals(fontKey))
                 {
@@ -128,7 +128,7 @@ namespace LMeter.Helpers
 
         public static string GetFontKey(FontData font)
         {
-            var key = $"{font.Name}_{font.Size}";
+            string key = $"{font.Name}_{font.Size}";
             key += (font.Chinese ? "_cnjp" : string.Empty);
             key += (font.Korean ? "_kr" : string.Empty);
             return key;
@@ -136,8 +136,8 @@ namespace LMeter.Helpers
 
         public static void CopyPluginFontsToUserPath()
         {
-            var pluginFontPath = GetPluginFontPath();
-            var userFontPath = GetUserFontPath();
+            string pluginFontPath = GetPluginFontPath();
+            string userFontPath = GetUserFontPath();
 
             if (string.IsNullOrWhiteSpace(pluginFontPath) || string.IsNullOrWhiteSpace(userFontPath))
             {
@@ -171,7 +171,7 @@ namespace LMeter.Helpers
                 pluginFonts = Array.Empty<string>();
             }
 
-            foreach (var font in pluginFonts)
+            foreach (string font in pluginFonts)
             {
                 try
                 {
@@ -180,8 +180,8 @@ namespace LMeter.Helpers
                         continue;
                     }
                     
-                    var fileName = font.Replace(pluginFontPath, string.Empty);
-                    var copyPath = Path.Combine(userFontPath, fileName);
+                    string fileName = font.Replace(pluginFontPath, string.Empty);
+                    string copyPath = Path.Combine(userFontPath, fileName);
                     if (!File.Exists(copyPath))
                     {
                         File.Copy(font, copyPath, false);
@@ -196,8 +196,8 @@ namespace LMeter.Helpers
 
         private static string GetPluginFontPath()
         {
-            var pluginInterface = Singletons.Get<DalamudPluginInterface>();
-            var path = pluginInterface.AssemblyLocation.DirectoryName;
+            DalamudPluginInterface pluginInterface = Singletons.Get<DalamudPluginInterface>();
+            string? path = pluginInterface.AssemblyLocation.DirectoryName;
 
             if (path is not null)
             {
