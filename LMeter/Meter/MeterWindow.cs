@@ -108,6 +108,29 @@ namespace LMeter.Meter
             _lastFrameWasDragging = _hovered || _dragging;
         }
 
+        private static Vector2 GetPositionInsideBoundaries(Vector2 zeroPosition, Vector2 localPosition, Vector2 windowSize, Vector2 viewportSize)
+        {
+            if (localPosition.X + windowSize.X > viewportSize.X)
+            {
+                localPosition.X = zeroPosition.X + viewportSize.X - windowSize.X;
+            } 
+            else if (localPosition.X < -viewportSize.X)
+            {
+                localPosition.X = -viewportSize.X;
+            }
+
+            if (localPosition.Y + windowSize.Y > viewportSize.Y)
+            {
+                localPosition.Y = zeroPosition.Y + viewportSize.Y - windowSize.Y;
+            }
+            else if (localPosition.Y < -viewportSize.Y)
+            {
+                localPosition.Y = -viewportSize.Y;
+            }
+
+            return localPosition;
+        }
+
         public void Draw(Vector2 pos)
         {
             if (!this.GeneralConfig.Preview && !this.VisibilityConfig.IsVisible())
@@ -117,6 +140,9 @@ namespace LMeter.Meter
 
             Vector2 localPos = pos + this.GeneralConfig.Position;
             Vector2 size = this.GeneralConfig.Size;
+            Vector2 viewportSize = ImGui.GetMainViewport().Size;
+            
+            localPos = GetPositionInsideBoundaries(pos, localPos, size, viewportSize);
 
             if (ImGui.IsMouseHoveringRect(localPos, localPos + size))
             {
@@ -213,7 +239,7 @@ namespace LMeter.Meter
                 };
 
                 int currentIndex = 0;
-                var playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
+                string playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
                 
                 if (sortedCombatants.Count > this.BarConfig.BarCount)
                 {
@@ -250,13 +276,13 @@ namespace LMeter.Meter
 
         private void MovePlayerIntoViewableRange(List<Combatant> sortedCombatants, int scrollPosition, string playerName)
         {
-            var oldPlayerIndex = sortedCombatants.FindIndex(combatant => combatant.Name.Contains("YOU") || combatant.Name.Contains(playerName));
+            int oldPlayerIndex = sortedCombatants.FindIndex(combatant => combatant.Name.Contains("YOU") || combatant.Name.Contains(playerName));
             if (oldPlayerIndex == -1)
             {
                 return;
             }
 
-            var newPlayerIndex = Math.Clamp(oldPlayerIndex, scrollPosition, this.BarConfig.BarCount + scrollPosition - 1);
+            int newPlayerIndex = Math.Clamp(oldPlayerIndex, scrollPosition, this.BarConfig.BarCount + scrollPosition - 1);
 
             if (oldPlayerIndex == newPlayerIndex)
             {

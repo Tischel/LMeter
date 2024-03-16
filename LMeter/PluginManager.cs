@@ -85,7 +85,7 @@ namespace LMeter
             ImGui.SetNextWindowSize(ImGui.GetMainViewport().Size);
             if (ImGui.Begin("LMeter_Root", _mainWindowFlags))
             {
-                foreach (var meter in _config.MeterList.Meters)
+                foreach (MeterWindow meter in _config.MeterList.Meters)
                 {
                     meter.Draw(_origin);
                 }
@@ -97,7 +97,7 @@ namespace LMeter
         public void Clear()
         {
             Singletons.Get<ACTClient>().Clear();
-            foreach (var meter in _config.MeterList.Meters)
+            foreach (MeterWindow meter in _config.MeterList.Meters)
             {
                 meter.Clear();
             }

@@ -117,7 +117,7 @@ namespace LMeter.Helpers
                     // Temporary measure, should be removed after a while of having being ran in production.
                     // We have to remove the `$type` lines from the config otherwise we can't properly move to system.text.json
                     // On top of it being a massive potential security issue and it being an anti pattern
-                    var typeDefPattern = @"(^.*""\$type"": .*\n)";
+                    string typeDefPattern = @"(^.*""\$type"": .*\n)";
                     jsonString = Regex.Replace(jsonString, typeDefPattern, string.Empty, RegexOptions.Multiline | RegexOptions.Compiled);
                     
                     config = JsonSerializer.Deserialize<LMeterConfig>(jsonString, SerializerOptionsIndented);

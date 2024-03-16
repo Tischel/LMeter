@@ -14,7 +14,7 @@ public class Vector4JsonConverter : JsonConverter<Vector4>
             throw new JsonException();
         }
 
-        var result = new Vector4();
+        Vector4 result = new Vector4();
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
@@ -22,25 +22,25 @@ public class Vector4JsonConverter : JsonConverter<Vector4>
                 return result;
             }
 
-            var propertyName = reader.GetString();
+            string? propertyName = reader.GetString();
             reader.Read();
             // Purposefully chose to have the GetSingle() calls inside of the cases for maintainability
             switch (propertyName)
             {
                 case nameof(result.X):
-                    var x = reader.GetSingle();
+                    float x = reader.GetSingle();
                     result.X = x;
                     break;
                 case nameof(result.Y):
-                    var y = reader.GetSingle();
+                    float y = reader.GetSingle();
                     result.Y = y;
                     break;
                 case nameof(result.Z):
-                    var z = reader.GetSingle();
+                    float z = reader.GetSingle();
                     result.Z = z;
                     break;
                 case nameof(result.W):
-                    var w = reader.GetSingle();
+                    float w = reader.GetSingle();
                     result.W = w;
                     break;
             }

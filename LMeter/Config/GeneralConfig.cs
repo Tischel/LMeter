@@ -96,8 +96,17 @@ namespace LMeter.Config
             if (ImGui.BeginChild($"##{this.Name}", new Vector2(size.X, size.Y), true))
             {
                 Vector2 screenSize = ImGui.GetMainViewport().Size;
-                ImGui.DragFloat2("Position", ref this._position, 1, -screenSize.X / 2, screenSize.X / 2);
-                ImGui.DragFloat2("Size", ref this._size, 1, 0, screenSize.Y);
+
+                // We have to manually calculate the width of the dragfloats, this is due to us wanting to emulate DragFloat2 but with 2 different boudaries
+                // Default of IMGUI is WindowWidth * 0.65f so we just cut that in half and play with the margins a bit
+                float width = ImGui.GetWindowWidth() * 0.325f;
+                ImGui.PushItemWidth(width - 1.5f);
+                ImGui.DragFloat("##X", ref this._position.X, 1, -screenSize.X / 2, screenSize.X / 2);
+                ImGui.SameLine(width + 2f);
+                ImGui.DragFloat("Position", ref this._position.Y, 1, -screenSize.Y / 2, screenSize.Y / 2);
+                ImGui.PopItemWidth();
+                
+                ImGui.DragFloat2("Size", ref this._size, 1, 0, screenSize.Y / 2);
                 ImGui.Checkbox("Lock", ref this._lock);
                 ImGui.Checkbox("Click Through", ref this._clickThrough);
                 ImGui.Checkbox("Preview", ref this._preview);
