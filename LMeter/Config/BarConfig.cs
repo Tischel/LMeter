@@ -275,7 +275,7 @@ namespace LMeter.Config
 
             using (FontsManager.PushFont(this.BarNameFontKey))
             {
-                var leftText = combatant.Name;
+                string leftText = combatant.Name;
                 if (!leftText.Contains("YOU"))
                 {
                     leftText = combatant.GetFormattedString($" {this.LeftTextFormat} ", this.ThousandsSeparators ? "N" : "F");

@@ -239,7 +239,7 @@ namespace LMeter.Meter
                 };
 
                 int currentIndex = 0;
-                var playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
+                string playerName = Singletons.Get<IClientState>().LocalPlayer?.Name.ToString() ?? "YOU";
                 
                 if (sortedCombatants.Count > this.BarConfig.BarCount)
                 {
@@ -276,13 +276,13 @@ namespace LMeter.Meter
 
         private void MovePlayerIntoViewableRange(List<Combatant> sortedCombatants, int scrollPosition, string playerName)
         {
-            var oldPlayerIndex = sortedCombatants.FindIndex(combatant => combatant.Name.Contains("YOU") || combatant.Name.Contains(playerName));
+            int oldPlayerIndex = sortedCombatants.FindIndex(combatant => combatant.Name.Contains("YOU") || combatant.Name.Contains(playerName));
             if (oldPlayerIndex == -1)
             {
                 return;
             }
 
-            var newPlayerIndex = Math.Clamp(oldPlayerIndex, scrollPosition, this.BarConfig.BarCount + scrollPosition - 1);
+            int newPlayerIndex = Math.Clamp(oldPlayerIndex, scrollPosition, this.BarConfig.BarCount + scrollPosition - 1);
 
             if (oldPlayerIndex == newPlayerIndex)
             {
