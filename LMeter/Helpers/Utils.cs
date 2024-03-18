@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using LMeter.Enums;
 
 namespace LMeter.Helpers
 {

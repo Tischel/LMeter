@@ -64,6 +64,9 @@
         <Reference Include="Dalamud">
             <Private>false</Private>
         </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <Private>false</Private>
+        </Reference>
         <Reference Include="ImGui.NET">
             <Private>false</Private>
         </Reference>

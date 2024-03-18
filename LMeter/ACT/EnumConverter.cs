@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace LMeter.ACT
 {
-    public class LazyFloatConverter : JsonConverter
+    public class EnumConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
@@ -13,17 +13,18 @@ namespace LMeter.ACT
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            if (objectType != typeof(LazyFloat))
+            if (!objectType.IsEnum)
             {
                 return serializer.Deserialize(reader, objectType);
             }
 
             if (reader.TokenType != JsonToken.String)
             {
-                return new LazyFloat(0f);
+                return 0;
             }
 
-            return new LazyFloat(serializer.Deserialize(reader, typeof(string))?.ToString());
+            string? value = serializer.Deserialize(reader, typeof(string))?.ToString();
+            return Enum.TryParse(objectType, value, true, out object? result) ? result : 0;
         }
 
         public override bool CanRead
@@ -38,7 +39,7 @@ namespace LMeter.ACT
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(LazyFloat);
+            return objectType.IsEnum;
         }
     }
 }

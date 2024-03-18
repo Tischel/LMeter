@@ -2,11 +2,11 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
+using Newtonsoft.Json;
 using LMeter.Helpers;
 using System.Linq;
 using System.Collections.Generic;
 using LMeter.ACT;
-using LMeter.Enums;
 
 namespace LMeter.Config
 {
@@ -17,67 +17,20 @@ namespace LMeter.Config
         
         public IConfigPage GetDefault() => new VisibilityConfig();
 
-        private string _customJobInput = string.Empty;
-        private string _hideIfValueInput = string.Empty;
-        private bool _alwaysHide;
-        private bool _hideInCombat;
-        private bool _hideOutsideCombat;
-        private bool _hideOutsideDuty;
-        private bool _hideWhilePerforming;
-        private bool _hideInGoldenSaucer;
-        private bool _hideIfNotConnected;
-        private JobType _showForJobTypes = JobType.All;
+        [JsonIgnore] private string _customJobInput = string.Empty;
+        [JsonIgnore] private string _hideIfValueInput = string.Empty;
 
-        public bool AlwaysHide
-        {
-            get => _alwaysHide;
-            set => _alwaysHide = value;
-        }
+        public bool AlwaysHide = false;
+        public bool HideInCombat = false;
+        public bool HideOutsideCombat = false;
+        public bool HideOutsideDuty = false;
+        public bool HideWhilePerforming = false;
+        public bool HideInGoldenSaucer = false;
+        public bool HideIfNotConnected = false;
 
-        public bool HideInCombat
-        {
-            get => _hideInCombat;
-            set => _hideInCombat = value;
-        }
-
-        public bool HideOutsideCombat
-        {
-            get => _hideOutsideCombat;
-            set => _hideOutsideCombat = value;
-        }
-
-        public bool HideOutsideDuty
-        {
-            get => _hideOutsideDuty;
-            set => _hideOutsideDuty = value;
-        }
-
-        public bool HideWhilePerforming
-        {
-            get => _hideWhilePerforming;
-            set => _hideWhilePerforming = value;
-        }
-
-        public bool HideInGoldenSaucer
-        {
-            get => _hideInGoldenSaucer;
-            set => _hideInGoldenSaucer = value;
-        }
-
-        public bool HideIfNotConnected
-        {
-            get => _hideIfNotConnected;
-            set => _hideIfNotConnected = value;
-        }
-
-        public JobType ShowForJobTypes
-        {
-            get => _showForJobTypes;
-            set => _showForJobTypes = value;
-        }
-
-        public string CustomJobString { get; set; } = string.Empty;
-        public List<Job> CustomJobList { get; set; } = new List<Job>();
+        public JobType ShowForJobTypes = JobType.All;
+        public string CustomJobString = string.Empty;
+        public List<Job> CustomJobList = new List<Job>();
 
         public bool IsVisible()
         {
@@ -123,17 +76,17 @@ namespace LMeter.Config
         {
             if (ImGui.BeginChild($"##{this.Name}", new Vector2(size.X, size.Y), true))
             {
-                ImGui.Checkbox("Always Hide", ref this._alwaysHide);
-                ImGui.Checkbox("Hide In Combat", ref this._hideInCombat);
-                ImGui.Checkbox("Hide Outside Combat", ref this._hideOutsideCombat);
-                ImGui.Checkbox("Hide Outside Duty", ref this._hideOutsideDuty);
-                ImGui.Checkbox("Hide While Performing", ref this._hideWhilePerforming);
-                ImGui.Checkbox("Hide In Golden Saucer", ref this._hideInGoldenSaucer);
-                ImGui.Checkbox("Hide While Not Connected to ACT", ref this._hideIfNotConnected);
+                ImGui.Checkbox("Always Hide", ref this.AlwaysHide);
+                ImGui.Checkbox("Hide In Combat", ref this.HideInCombat);
+                ImGui.Checkbox("Hide Outside Combat", ref this.HideOutsideCombat);
+                ImGui.Checkbox("Hide Outside Duty", ref this.HideOutsideDuty);
+                ImGui.Checkbox("Hide While Performing", ref this.HideWhilePerforming);
+                ImGui.Checkbox("Hide In Golden Saucer", ref this.HideInGoldenSaucer);
+                ImGui.Checkbox("Hide While Not Connected to ACT", ref this.HideIfNotConnected);
                 
                 DrawHelpers.DrawSpacing(1);
                 string[] jobTypeOptions = Enum.GetNames(typeof(JobType));
-                ImGui.Combo("Show for Jobs", ref Unsafe.As<JobType, int>(ref this._showForJobTypes), jobTypeOptions, jobTypeOptions.Length);
+                ImGui.Combo("Show for Jobs", ref Unsafe.As<JobType, int>(ref this.ShowForJobTypes), jobTypeOptions, jobTypeOptions.Length);
 
                 if (this.ShowForJobTypes == JobType.Custom)
                 {

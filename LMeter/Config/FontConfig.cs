@@ -4,22 +4,25 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Interface;
 using ImGuiNET;
+using Newtonsoft.Json;
 using LMeter.Helpers;
 
 namespace LMeter.Config
 {
     public class FontConfig : IConfigPage
     {
-        private static readonly string? _fontPath = FontsManager.GetUserFontPath();
-        private int _selectedFont;
-        private int _selectedSize = 23;
-        private string[] _fonts = FontsManager.GetFontNamesFromPath(FontsManager.GetUserFontPath());
-        private readonly string[] _sizes = Enumerable.Range(1, 40).Select(i => i.ToString()).ToArray();
-        private bool _chinese;
-        private bool _korean;
-        
         public string Name => "Fonts";
         
+        public IConfigPage GetDefault() => new FontConfig();
+
+        [JsonIgnore] private static string? _fontPath = FontsManager.GetUserFontPath();
+        [JsonIgnore] private int _selectedFont = 0;
+        [JsonIgnore] private int _selectedSize = 23;
+        [JsonIgnore] private string[] _fonts = FontsManager.GetFontNamesFromPath(FontsManager.GetUserFontPath());
+        [JsonIgnore] private string[] _sizes = Enumerable.Range(1, 40).Select(i => i.ToString()).ToArray();
+        [JsonIgnore] private bool _chinese = false;
+        [JsonIgnore] private bool _korean = false;
+
         public Dictionary<string, FontData> Fonts { get; set; }
 
         public FontConfig()
@@ -38,8 +41,6 @@ namespace LMeter.Config
                 }
             }
         }
-        
-        public IConfigPage GetDefault() => new FontConfig();
 
         public void DrawConfig(Vector2 size, float padX, float padY)
         {

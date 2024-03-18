@@ -2,20 +2,27 @@ using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using LMeter.Config;
 using LMeter.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using LMeter.ACT.DataStructures;
 
 namespace LMeter.ACT
 {
+    public enum ConnectionStatus
+    {
+        NotConnected,
+        Connected,
+        ShuttingDown,
+        Connecting,
+        ConnectionFailed
+    }
+
     public class ACTClient : IPluginDisposable
     {
         private ACTConfig _config;
@@ -25,14 +32,6 @@ namespace LMeter.ACT
         private ACTEvent? _lastEvent;
         private ConnectionStatus _status;
         private List<ACTEvent> _pastEvents;
-
-        private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            Converters = {
-                new JsonStringEnumConverter()
-            }
-        };
 
         public static ConnectionStatus Status => Singletons.Get<ACTClient>()._status;
         public static List<ACTEvent> PastEvents => Singletons.Get<ACTClient>()._pastEvents;
@@ -73,7 +72,7 @@ namespace LMeter.ACT
         {
             _lastEvent = null;
             _pastEvents = new List<ACTEvent>();
-            if (_config.ClearAct)
+            if (_config.ClearACT)
             {
                 IChatGui chat = Singletons.Get<IChatGui>();
                 XivChatEntry message = new XivChatEntry()
@@ -103,7 +102,7 @@ namespace LMeter.ACT
 
             try
             {
-                _receiveTask = Task.Run(() => this.Connect(_config.ActSocketAddress));
+                _receiveTask = Task.Run(() => this.Connect(_config.ACTSocketAddress));
             }
             catch (Exception ex)
             {
@@ -172,7 +171,7 @@ namespace LMeter.ACT
                             {
                                 try
                                 {
-                                    ACTEvent? newEvent = JsonSerializer.Deserialize<ACTEvent>(data, JsonSerializerOptions);
+                                    ACTEvent? newEvent = JsonConvert.DeserializeObject<ACTEvent>(data);
 
                                     if (newEvent?.Encounter is not null &&
                                         newEvent?.Combatants is not null &&

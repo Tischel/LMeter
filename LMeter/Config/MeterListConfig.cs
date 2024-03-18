@@ -6,6 +6,7 @@ using Dalamud.Interface.Internal.Notifications;
 using ImGuiNET;
 using LMeter.Helpers;
 using LMeter.Meter;
+using Newtonsoft.Json;
 
 namespace LMeter.Config
 {
@@ -13,12 +14,17 @@ namespace LMeter.Config
     {
         private const float MenuBarHeight = 40;
 
-        private string _input = string.Empty;
+        [JsonIgnore] private string _input = string.Empty;
 
         public string Name => "Profiles";
 
-        public List<MeterWindow> Meters { get; set; } = [];
+        public List<MeterWindow> Meters { get; set; }
 
+        public MeterListConfig()
+        {
+            this.Meters = new List<MeterWindow>();
+        }
+        
         public IConfigPage GetDefault() => new MeterListConfig();
 
         public void DrawConfig(Vector2 size, float padX, float padY)

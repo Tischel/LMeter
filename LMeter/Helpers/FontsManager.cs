@@ -9,6 +9,40 @@ using System.Reflection;
 
 namespace LMeter.Helpers
 {
+    public struct FontData
+    {
+        public string Name;
+        public int Size;
+        public bool Chinese;
+        public bool Korean;
+
+        public FontData(string name, int size, bool chinese, bool korean)
+        {
+            Name = name;
+            Size = size;
+            Chinese = chinese;
+            Korean = korean;
+        }
+    }
+
+    public class FontScope : IDisposable
+    {
+        private bool _fontPushed;
+
+        public FontScope(bool fontPushed)
+        {
+            _fontPushed = fontPushed;
+        }
+
+        public void Dispose()
+        {
+            if (_fontPushed)
+            {
+                ImGui.PopFont();
+            }
+        }
+    }
+
     public class FontsManager : IPluginDisposable
     {
         private IEnumerable<FontData> _fontData;
