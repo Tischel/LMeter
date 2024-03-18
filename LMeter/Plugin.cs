@@ -10,7 +10,6 @@ using LMeter.Helpers;
 using LMeter.Meter;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace LMeter
 {
@@ -49,7 +48,6 @@ namespace LMeter
             ITextureSubstitutionProvider textureSubstitutionProvider
         )
         {
-            Plugin.Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? Plugin.Version;
             Plugin.ConfigFileDir = pluginInterface.GetPluginConfigDirectory();
             Plugin.ConfigFilePath = Path.Combine(pluginInterface.GetPluginConfigDirectory(), Plugin.ConfigFileName);
 
@@ -108,7 +106,8 @@ namespace LMeter
 
         private static IDalamudTextureWrap? LoadIconTexture(UiBuilder uiBuilder)
         {
-            string? pluginPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            DalamudPluginInterface pluginInterface = Singletons.Get<DalamudPluginInterface>();
+            string? pluginPath = pluginInterface.AssemblyLocation.DirectoryName;
             if (string.IsNullOrEmpty(pluginPath))
             {
                 return null;
@@ -135,7 +134,8 @@ namespace LMeter
 
         private static string LoadChangelog()
         {
-            string? pluginPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            DalamudPluginInterface pluginInterface = Singletons.Get<DalamudPluginInterface>();
+            string? pluginPath = pluginInterface.AssemblyLocation.DirectoryName;
 
             if (string.IsNullOrEmpty(pluginPath))
             {

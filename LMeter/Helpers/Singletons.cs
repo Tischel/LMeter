@@ -9,7 +9,7 @@ namespace LMeter.Helpers
 
         public static T Get<T>()
         {
-            if (ActiveInstances.TryGetValue(typeof(T), out object? o) && o != null)
+            if (ActiveInstances.TryGetValue(typeof(T), out object? o))
             {
                 return (T)o;
             }
@@ -24,7 +24,10 @@ namespace LMeter.Helpers
 
         public static void Register<T>(T newSingleton)
         {
-            if (newSingleton == null) { return; }
+            if (newSingleton == null)
+            {
+                return;
+            }
 
             if (!ActiveInstances.TryAdd(typeof(T), newSingleton))
             {
@@ -47,8 +50,8 @@ namespace LMeter.Helpers
         }
     }
 
-    public interface IPluginDisposable
-    {
-        void Dispose();
-    }
+    /// <summary>
+    /// Just a wrapper interface for IDisposable so we can typematch against our own managed IDisposables
+    /// </summary>
+    public interface IPluginDisposable : IDisposable;
 }
